@@ -1,13 +1,17 @@
 package org.oat1
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
+
 
 ///////////------------EVENTO LÓGICA------------///////////
     public final data class Evento(
         var nomeEvento: String,
         var descricao: String,
-        var dataInicio: LocalDateTime,
-        var dataFim: LocalDateTime,
+        var dataInicio: LocalDateTime, //CORRIGIR
+        var dataFim: LocalDateTime,//CORRIGIR
         var eventoPrincipal: String,
         var capacidadeMaxima: Int = 0,
         var localEvento: String,
@@ -40,6 +44,7 @@ import java.time.format.DateTimeFormatter
 fun main() { // Escrever código aqui
     val listarEventos = mutableListOf<Evento>()
     var ativo = true
+    val data = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
     while(ativo){
         println(" - - - Dendê Eventos - - -")
@@ -58,18 +63,33 @@ fun main() { // Escrever código aqui
             }*/
             "4" -> {
                 println("-> Cadastro de Evento:")
-                val formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
                 //NOME ->
                 println("- Nome do Evento: ")
                 var nomeEventoUserInput = readln()
                 //DESCRIÇÃO ->
                 println("- Descrição: ")
                 var descricaoEventoUserInput = readln()
+
                 //DATAS ->
-                println(" - Data Inicio e horário (dd/mm/aaaa 00:00), minimo de 30 mintuos: ")
+                println(" - Data Inicio e horário, minimo de 30 mintuos: ")//CORRIGIR e achar um jeito de prevenir erro
+
+                println("DATA e HORÁRIO - YYYY/MM/DDT00:00:00 :")
                 var dataInicioUserInput = readln()
-                println(" - Data Fim e horário (dd/mm/aaaa 00:00), minimo de 30 mintuos:: ")
+                var conversaoDataInicio = LocalDateTime.parse(dataInicioUserInput)
+
+                println("DATA e HORÁRIO - YYYY/MM/DDT00:00:00 :")
                 var dataFimUserInput = readln()
+                var conversaoDataFim = LocalDateTime.parse(dataFimUserInput)
+
+                val calculoHorario = conversaoDataFim.toInstant(TimeZone.UTC) - conversaoDataInicio.toInstant(TimeZone.UTC)
+                val diferencaHorario = calculoHorario.inWholeMinutes
+
+                if (diferencaHorario < 30){
+                    println("ERRO: Evento deve ter no mínimo 30 minutos de duração.")
+                    return
+                }
+                //DATAS - Close
+
                 //EVENTO PRINCIPAL ->
                 println("- Evento Principal:")
                 var eventoPrincipalUserInput = readln()
@@ -133,34 +153,31 @@ fun main() { // Escrever código aqui
                     "2" -> tipoModalidade = Modalidade.HÍBRIDO
                     "3" -> tipoModalidade = Modalidade.REMOTO
                 }
-                var statusDefault = false
-
-                val dataInicioFormatado = LocalDateTime.parse(dataInicioUserInput, formatador)
-                val dataFimFormatado = LocalDateTime.parse(dataFimUserInput,formatador)
 
                 //CRIANDO OBJETO EVENTO
-                if (dataInicioFormatado.isAfter(dataFimFormatado)){
-                    println("ERRO confilto de datas, evento não pode terminar antes de começar.")
-                } else {
-                    val novoEvento = Evento(
-                        nomeEvento = nomeEventoUserInput,
-                        descricao = descricaoEventoUserInput,
-                        dataInicio = dataInicioFormatado,
-                        dataFim = dataFimFormatado,
-                        eventoPrincipal = eventoPrincipalUserInput,
-                        capacidadeMaxima = capacidadeMaximaUserInput,
-                        localEvento = localEventoUserInput,
-                        precoUnitario = precoUnitarioUserInput,
-                        taxaEstorno = taxaEstornoUserInput,
-                        tipoEvento = tipoFinal,
-                        modalidade = tipoModalidade,
-                        estornaValor = false,
-                        isEventActive = statusDefault
+                var statusDefault = false
+
+                //val juncaoDataHoraInicio = dataIncioUserInput + horarioInicio
+                //val dataInicioFormatado = LocalDateTime.parse()//CORRIGIR
+                //val dataFimFormatado = LocalDateTime.parse()//CORRIGIR
+
+                val novoEvento = Evento(
+                    nomeEvento = nomeEventoUserInput,
+                    descricao = descricaoEventoUserInput,
+                    dataInicio = conversaoDataInicio,//CORRIGIR
+                    dataFim = conversaoDataFim,//CORRIGIR
+                    eventoPrincipal = eventoPrincipalUserInput,
+                    capacidadeMaxima = capacidadeMaximaUserInput,
+                    localEvento = localEventoUserInput,
+                    precoUnitario = precoUnitarioUserInput,
+                    taxaEstorno = taxaEstornoUserInput,
+                    tipoEvento = tipoFinal,
+                    modalidade = tipoModalidade,
+                    estornaValor = false,
+                    isEventActive = statusDefault
                     )
                     listarEventos.add(novoEvento)
                     println("Evento ${novoEvento.nomeEvento} cadastrado com sucesso!")
-                }
-
             }
             "5" -> {
                 println("-> Alterar Evento:")
@@ -188,43 +205,50 @@ fun main() { // Escrever código aqui
                             println("Atualizado!")
                         }
                         "3" -> {
-                            println("Digite a nova data de e horário (dd/mm/aaaa 00:00), minimo de 30 mintuos::")
-                            val formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
-                            evento.dataInicio = LocalDateTime.parse(readln(), formatador)
+                            println("Digite a nova data de INICIO - YYYY/MM/DDT00:00:00 :")//CORRIGIR
+                            var dataInicioUserInput = readln()
+                            var conversaoDataInicio = LocalDateTime.parse(dataInicioUserInput)
+
+                            println("Digite a nova data de FINAL - YYYY/MM/DDT00:00:00 :")
+                            var dataFimUserInput = readln()
+                            var conversaoDataFim = LocalDateTime.parse(dataFimUserInput)
+
+                            val calculoHorario = conversaoDataFim.toInstant(TimeZone.UTC) - conversaoDataInicio.toInstant(TimeZone.UTC)
+                            val diferencaHorario = calculoHorario.inWholeMinutes
+
+                            if (diferencaHorario < 30){
+                                println("ERRO: Evento deve ter no mínimo 30 minutos de duração.")
+                                return
+                            }
+
                             println("Atualizado!")
                         }
                         "4" -> {
-                            println("Digite a nova data de fim e horário (dd/mm/aaaa 00:00), minimo de 30 mintuos::")
-                            val formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
-                            evento.dataFim = LocalDateTime.parse(readln(), formatador)
-                            println("Atualizado!")
-                        }
-                        "5" -> {
                             println("Digite o novo evento principal:")
                             evento.eventoPrincipal = readln()
                             println("Atualizado!")
                         }
-                        "6" -> {
+                        "5" -> {
                             println("Digite a nova capacidade máxima: ")
                             evento.capacidadeMaxima = readln().toInt()
                             println("Atualizado!")
                         }
-                        "7" -> {
+                        "6" -> {
                             println("Digite o novo local: ")
                             evento.localEvento = readln()
                             println("Atualizado!")
                         }
-                        "8" -> {
+                        "7" -> {
                             println("Digite o novo preco: ")
                             evento.precoUnitario = readln().toFloat()
                             println("Atualizado!")
                         }
-                        "9" -> {
+                        "8" -> {
                             println("Digite a nova taxa de estorno: ")
                             evento.taxaEstorno = readln().toFloat()
                             println("Atualizado!")
                         }
-                        "10" -> {
+                        "9" -> {
                             println("Digite o novo tipo de evento:")
                             val escolhaTipo = readln()
                             when(escolhaTipo){
@@ -254,7 +278,7 @@ fun main() { // Escrever código aqui
                             }
                             println("Atualizado!")
                         }
-                        "11" -> {
+                        "10" -> {
                             println("Digite a nova modalidade:")
                             evento.modalidade
                             val escolhaTipoModalidade = readln()
@@ -271,7 +295,7 @@ fun main() { // Escrever código aqui
             }
             "6" -> {
                 println("-> Status do Evento: ")
-                /*val eventosDoUsuario = listarEventos
+                /*val eventosDoUsuario = listarEventos //para quando tiver user
                     .filter { it.organizador == "NomeDoUsuarioLogado" }
                     .sortedWith(compareBy<Evento> { it.dataInicio }.thenBy { it.nomeEvento }) */
                 if (listarEventos.isEmpty()){
