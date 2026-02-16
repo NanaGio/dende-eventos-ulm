@@ -46,7 +46,7 @@ fun main() { // Escrever código aqui
     var ativo = true
     val data = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
-    while(ativo){
+    do{
         println(" - - - Dendê Eventos - - -")
         println("Bem vindo a plataforma Dendê Eventos! Escolha a opção para prosseguir: ")
         /*PARTE DE USUARIOS 1 2 3->println()*/
@@ -62,10 +62,18 @@ fun main() { // Escrever código aqui
                 USER COMUM OU ORGANIZADOR
             }*/
             "4" -> {
-                println("-> Cadastro de Evento:")
+                println("-> Cadastro de Evento, clique enter:")
                 //NOME ->
-                println("- Nome do Evento: ")
                 var nomeEventoUserInput = readln()
+                do {
+                    println("- Nome do Evento: ")
+                    nomeEventoUserInput = readln().trim()
+                    if (nomeEventoUserInput.isBlank()){
+                        println("ERRO no nome do Evento")
+                    }
+                } while (nomeEventoUserInput.isBlank())
+
+
                 //DESCRIÇÃO ->
                 println("- Descrição: ")
                 var descricaoEventoUserInput = readln()
@@ -73,38 +81,86 @@ fun main() { // Escrever código aqui
                 //DATAS ->
                 println(" - Data Inicio e horário, minimo de 30 mintuos: ")//CORRIGIR e achar um jeito de prevenir erro
 
-                println("DATA e HORÁRIO - YYYY/MM/DDT00:00:00 :")
-                var dataInicioUserInput = readln()
-                var conversaoDataInicio = LocalDateTime.parse(dataInicioUserInput)
+                var conversaoDataInicio: LocalDateTime? = null
+                do {
+                    try{
+                        println("DATA e HORÁRIO INICIO - YYYY-MM-DDT00:00:00 :")
+                        var dataInicioUserInput = readln().trim()
+                        conversaoDataInicio = LocalDateTime.parse(dataInicioUserInput)
+                    }catch (e: Exception){
+                        println("ERRO -> Formato Inválido.")
+                        conversaoDataInicio = null
+                    }
+                } while (conversaoDataInicio == null)
 
-                println("DATA e HORÁRIO - YYYY/MM/DDT00:00:00 :")
-                var dataFimUserInput = readln()
-                var conversaoDataFim = LocalDateTime.parse(dataFimUserInput)
+                var conversaoDataFim: LocalDateTime? = null
+                do {
+                    try{
+                        println("DATA e HORÁRIO - YYYY/MM/DDT00:00:00 :")
+                        var dataFimUserInput = readln().trim()
+                        conversaoDataFim = LocalDateTime.parse(dataFimUserInput)
 
-                val calculoHorario = conversaoDataFim.toInstant(TimeZone.UTC) - conversaoDataInicio.toInstant(TimeZone.UTC)
-                val diferencaHorario = calculoHorario.inWholeMinutes
+                        val calculoHorario = conversaoDataFim.toInstant(TimeZone.UTC) - conversaoDataInicio.toInstant(TimeZone.UTC)
+                        val diferencaHorario = calculoHorario.inWholeMinutes
 
-                if (diferencaHorario < 30){
-                    println("ERRO: Evento deve ter no mínimo 30 minutos de duração.")
-                    return
-                }
+                        if (diferencaHorario < 30){
+                            println("ERRO: Evento deve ter no mínimo 30 minutos de duração.")
+                            return
+                        }
+                    }catch (e: Exception){
+                        println("ERRO -> Formato Inválido.")
+                        conversaoDataFim = null
+                    }
+                }while (conversaoDataFim == null)
+
+
+
                 //DATAS - Close
 
                 //EVENTO PRINCIPAL ->
                 println("- Evento Principal:")
                 var eventoPrincipalUserInput = readln()
+
                 //CAPACIDADE MÁXIMA ->
-                println("Capacidade máxima: ")
-                var capacidadeMaximaUserInput = readln().toInt()
+                var capacidadeMaximaUserInput : Int? = null
+                do{
+                    try{
+                        println("Capacidade máxima: ")
+                        capacidadeMaximaUserInput = readln().toInt()
+                    }catch(e: NumberFormatException){
+                        println("ERRO -> Formato Inválido.")
+                        capacidadeMaximaUserInput = null
+                    }
+                }while (capacidadeMaximaUserInput == null)
+
+
                 //LOCAL ->
                 println("Local do evento: ")
                 var localEventoUserInput = readln()
+
                 //PREÇO UNITÁRIO ->
-                println("Determine o preço unitário:")
-                var precoUnitarioUserInput = readln().toFloat()
+                var precoUnitarioUserInput: Float? = null
+                do{
+                    try{
+                        println("Determine o preço unitário:")
+                        precoUnitarioUserInput = readln().toFloat()
+                    }catch(e: NumberFormatException){
+                        println("ERRO -> Formato Inválido.")
+                        precoUnitarioUserInput = null
+                    }
+                }while(precoUnitarioUserInput == null)
+
                 //TAXA EXTORNO ->
-                println("Determine a taxa de extorno:")
-                var taxaEstornoUserInput = readln().toFloat()
+                var taxaEstornoUserInput : Float? = null
+                do{
+                    try{
+                        println("Determine a taxa de extorno:")
+                        taxaEstornoUserInput = readln().toFloat()
+                    }catch(e: NumberFormatException){
+                        println("ERRO -> Formato Inválido.")
+                        taxaEstornoUserInput = null
+                    }
+                }while(taxaEstornoUserInput == null)
                 //ESTORNAR VALOR->
                 //Criar lógica de devolução
 
@@ -178,7 +234,7 @@ fun main() { // Escrever código aqui
                     )
                     listarEventos.add(novoEvento)
                     println("Evento ${novoEvento.nomeEvento} cadastrado com sucesso!")
-            }
+            }//CADASTRO DE EVENTO
             "5" -> {
                 println("-> Alterar Evento:")
                 listarEventos.sortWith(compareBy<Evento> { it.dataInicio }.thenBy { it.nomeEvento })
@@ -205,22 +261,43 @@ fun main() { // Escrever código aqui
                             println("Atualizado!")
                         }
                         "3" -> {
-                            println("Digite a nova data de INICIO - YYYY/MM/DDT00:00:00 :")//CORRIGIR
-                            var dataInicioUserInput = readln()
-                            var conversaoDataInicio = LocalDateTime.parse(dataInicioUserInput)
+                            //DATAS ->
+                            println(" - Data Inicio e horário, minimo de 30 mintuos: ")//CORRIGIR e achar um jeito de prevenir erro
 
-                            println("Digite a nova data de FINAL - YYYY/MM/DDT00:00:00 :")
-                            var dataFimUserInput = readln()
-                            var conversaoDataFim = LocalDateTime.parse(dataFimUserInput)
+                            var novaConversaoDataInicio: LocalDateTime? = null
+                            do {
+                                try{
+                                    println("NOVA -> DATA e HORÁRIO INICIO - YYYY-MM-DDT00:00:00 :")
+                                    var novaDataInicioUserInput = readln().trim()
+                                    novaConversaoDataInicio = LocalDateTime.parse(novaDataInicioUserInput)
+                                }catch (e: Exception){
+                                    println("ERRO -> Formato Inválido.")
+                                    novaConversaoDataInicio = null
+                                }
+                            } while (novaConversaoDataInicio == null)
 
-                            val calculoHorario = conversaoDataFim.toInstant(TimeZone.UTC) - conversaoDataInicio.toInstant(TimeZone.UTC)
-                            val diferencaHorario = calculoHorario.inWholeMinutes
+                            var novaConversaoDataFim: LocalDateTime? = null
+                            do {
+                                try{
+                                    println("NOVA -> DATA e HORÁRIO FIM - YYYY/MM/DDT00:00:00 :")
+                                    var novaDataFimUserInput = readln().trim()
+                                    novaConversaoDataFim = LocalDateTime.parse(novaDataFimUserInput)
 
-                            if (diferencaHorario < 30){
-                                println("ERRO: Evento deve ter no mínimo 30 minutos de duração.")
-                                return
-                            }
+                                    val calculoHorario = novaConversaoDataFim.toInstant(TimeZone.UTC) - novaConversaoDataInicio.toInstant(TimeZone.UTC)
+                                    val diferencaHorario = calculoHorario.inWholeMinutes
 
+                                    if (diferencaHorario < 30){
+                                        println("ERRO: Evento deve ter no mínimo 30 minutos de duração.")
+                                        return
+                                    }
+                                }catch (e: Exception){
+                                    println("ERRO -> Formato Inválido.")
+                                    novaConversaoDataFim = null
+                                }
+                            }while (novaConversaoDataFim == null)
+
+                            evento.dataInicio = novaConversaoDataInicio
+                            evento.dataFim = novaConversaoDataFim
                             println("Atualizado!")
                         }
                         "4" -> {
@@ -229,7 +306,17 @@ fun main() { // Escrever código aqui
                             println("Atualizado!")
                         }
                         "5" -> {
-                            println("Digite a nova capacidade máxima: ")
+                            var novaCapacidade: Int? = null
+                            do{
+                                try{
+                                    println("Digite a nova capacidade máxima")
+                                    novaCapacidade = readln().toInt()
+                                }catch(e: NumberFormatException){
+                                    println("ERRO: Digite um número inteiro válido.")
+                                    novaCapacidade = null
+                                }
+
+                            } while(novaCapacidade == null)
                             evento.capacidadeMaxima = readln().toInt()
                             println("Atualizado!")
                         }
@@ -239,13 +326,33 @@ fun main() { // Escrever código aqui
                             println("Atualizado!")
                         }
                         "7" -> {
-                            println("Digite o novo preco: ")
-                            evento.precoUnitario = readln().toFloat()
+                            var novoPreco: Float? = null
+                            do {
+                                try {
+                                    println("Digite o novo preço unitário:")
+                                    novoPreco = readln().toFloat()
+
+                                } catch (e: NumberFormatException) {
+                                    println("ERRO: Digite um número válido (ex: 10.50).")
+                                    novoPreco = null
+                                }
+                            } while (novoPreco == null)
+                            evento.precoUnitario = novoPreco
                             println("Atualizado!")
                         }
                         "8" -> {
-                            println("Digite a nova taxa de estorno: ")
-                            evento.taxaEstorno = readln().toFloat()
+                            var novaTaxa: Float? = null
+                            do {
+                                try {
+                                    println("Digite a nova taxa de estorno (0.0 a 1.0) (Atual: ${evento.taxaEstorno}):")
+                                    novaTaxa = readln().toFloat()
+
+                                } catch (e: NumberFormatException) {
+                                    println("ERRO: Digite um número válido (ex: 0.5).")
+                                    novaTaxa = null
+                                }
+                            } while (novaTaxa == null)
+                            evento.taxaEstorno = novaTaxa
                             println("Atualizado!")
                         }
                         "9" -> {
@@ -292,7 +399,7 @@ fun main() { // Escrever código aqui
                         }
                     }
                 }
-            }
+            }//ALTERAR EVENTO
             "6" -> {
                 println("-> Status do Evento: ")
                 /*val eventosDoUsuario = listarEventos //para quando tiver user
@@ -316,7 +423,7 @@ fun main() { // Escrever código aqui
                     }
                     println("Atualizado!")
                 }
-            }
+            }//STATUS DO EVENTO
             "0" -> {
                 println("SAIR ->")
                 ativo = false
@@ -325,7 +432,7 @@ fun main() { // Escrever código aqui
                 println("Comando inválido, favor, insira um comando da lista.")
             }
         }
-    }
+    } while (userChoice != "0")
 
 
 }
