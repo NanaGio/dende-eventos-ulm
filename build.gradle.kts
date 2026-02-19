@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.3.0"
+    kotlin("jvm") version "2.1.0"
 }
 
 group = "org.oat1"
@@ -14,7 +14,7 @@ dependencies {
 }
 
 kotlin {
-    jvmToolchain(23)
+    jvmToolchain(24)
 }
 
 tasks.test {
