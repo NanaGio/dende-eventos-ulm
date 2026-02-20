@@ -1,19 +1,22 @@
+data class User(
+    var username: String,
+    var birthday: String,
+    val email: String,
+    var gender: String,
+    var password: String,
+    var isOrganizer: Boolean,
+    var cnpj: String = "",
+    var razaoSocial: String = "",
+    var nomeFantasia: String = "",
+    var isActive: Boolean = true,
+)
+
 fun main() { // Escrever código aqui
-    var ativo = true
+    var cadastro = true
+    var sistema = true
+    val dataValida = Regex("""\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])""")
+    lateinit var user: User
 
-    data class User(var username: String, var birthday: String, var gender: String, val email: String, var password: String, var isActive: Boolean = true)
-
-    data class Organizer(
-        var username: String,
-        var birthday: String,
-        val email: String,
-        var gender: String,
-        var password: String,
-        var cnpj: String = "",
-        var razaoSocial: String = "",
-        var nomeFantasia: String = "",
-        var isActive: Boolean = true,
-    )
 
     do {
         println(" - - - Dendê Eventos - - -")
@@ -21,30 +24,79 @@ fun main() { // Escrever código aqui
         println("1 -> Usuário - CADASTRAR:")
         println("2 -> Organizador - CADASTRAR:")
 
-        val opcaoIni = readln().toInt()
+        val opcaoIni = readln().toIntOrNull()
+
+        if (opcaoIni == null) {
+            println("Não é permitido nenhum formato além de número")
+            continue
+        }
 
         when (opcaoIni) {
             1 -> {
                 println("Você escolheu a opção de cadastrar usuário.")
                 println("Escreva seu nome: ")
-                val username = readln().lowercase().replaceFirstChar { it.uppercase() }
+                var username: String
+                do {
+                    username = readln().lowercase().replaceFirstChar { it.uppercase() }
+                    if (username.isBlank()) {
+                        println("É necessário digitar nome de usuário")
+                        continue
+                    } else if (username.any() {it.isDigit()}) {
+                        println("Não pode conter números")
+                        continue
+                    }
+                } while (username.isBlank() || username.any() {it.isDigit()})
 
-                println("Digite sua data de nascimento DD/MM/YYYY: ")
-                val birthday = readln()
+
+                println("Digite sua data de nascimento YYYY-MM-DD: ")
+                var birthday: String
+                do {
+                    birthday = readln()
+                    if (birthday.isBlank()) {
+                        println("É necessário digitar data de nascimento")
+                        continue
+                    } else if (!dataValida.matches(birthday)) {
+                        println("Formato de data inválida")
+                        continue
+                    }
+                } while (birthday.isBlank() || !dataValida.matches(birthday))
+
 
                 println("Digite seu genero: ")
-                val gender = readln().lowercase()
+                var gender: String
+                do {
+                    gender = readln().lowercase().replaceFirstChar { it.uppercase() }
+                    if (gender.isBlank()) {
+                        println("É necessário digitar nome de usuário")
+                        continue
+                    } else if (gender.any() {it.isDigit()}) {
+                        println("Não pode conter números")
+                        continue
+                    }
+                } while (gender.isBlank() || gender.any() {it.isDigit()})
 
                 println("Escreva seu Email: ")
-                val email = readln().lowercase()
+                var email: String
+                do {
+                    email = readln().lowercase().replaceFirstChar { it.uppercase() }
+                    if (email.isBlank()) {
+                        println("É necessário digitar nome de usuário")
+                        continue
+                    } else if (email.any() {it.isDigit()}) {
+                        println("Não pode conter números")
+                        continue
+                    }
+                } while (email.isBlank() || email.any() {it.isDigit()})
+
 
                 println("Digite a senha: ")
                 val password = readln()
 
-                val user = User(username, birthday, gender, email, password)
+                user = User(username, birthday, email, gender, password, isOrganizer = false)
 
                 println("===Usuário criado com sucesso===")
                 println(user)
+                cadastro = false
             }
 
             2 -> {
@@ -55,7 +107,7 @@ fun main() { // Escrever código aqui
                 println("Escreva seu nome: ")
                 val username = readln().lowercase().replaceFirstChar { it.uppercase() }
 
-                println("Digite sua data de nascimento DD/MM/YYYY: ")
+                println("Digite sua data de nascimento YYYY-MM-DD: ")
                 val birthday = readln()
 
                 println("Digite seu genero: ")
@@ -69,7 +121,7 @@ fun main() { // Escrever código aqui
 
                 if(empresa == "S") {
                     println("digite o CNPJ apenas os dígitos: ")
-                    var cnpj = readln()
+                    val cnpj = readln()
 
                     println("Digite a Razão Social: ")
                     val razaoSocial = readln().lowercase()
@@ -77,21 +129,39 @@ fun main() { // Escrever código aqui
                     println("Digite o Nome Fantasia: ")
                     val nomeFantasia = readln().lowercase()
 
-                    val user = Organizer(username, birthday, email, gender, password, cnpj, razaoSocial, nomeFantasia)
+                    user = User(username, birthday, email, gender, password, isOrganizer = true, cnpj, razaoSocial, nomeFantasia)
                 } else {
-                    val user = Organizer(username, birthday, email, gender, password)
+                    user = User(username, birthday, email, gender, password, isOrganizer = true)
                 }
-
-
 
                 println("===Usuário criado com sucesso===")
                 println(user)
+                cadastro = false
             }
-
             else -> {
-                ativo = false
+                println("Opção errada, escolha apenas 1 ou 2")
             }
         }
 
-    } while (ativo)
+    } while (cadastro)
+    do {
+        println("Olá ${user.username}, Bem vindo!")
+        println("Escolha alguma opção para prosseguir: ")
+        println("1 -> Ativar Usuário")
+        println("0 -> Sair")
+        val opcaoSis = readln().toInt()
+        when(opcaoSis) {
+            1 -> {
+                println("Deseja confirmar a ativação do usuário: [s]im [n]ão")
+                val confirmacao = readln().lowercase()
+                if(confirmacao == "s") {
+                    user.isActive = true
+                }
+            }
+
+            else -> {
+                sistema = false
+            }
+        }
+    } while (sistema)
 }
