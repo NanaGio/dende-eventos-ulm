@@ -42,7 +42,7 @@ import kotlinx.datetime.toLocalDateTime
 ///////////------------EVENTO LÓGICA------------///////////
 
 fun main() { // Escrever código aqui
-    val listarEventos = mutableListOf<Evento>()
+    val listarEventos = mutableListOf<Evento>()/* trocar para VAR*/
     var ativo = true
     val data = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
