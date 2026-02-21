@@ -45,7 +45,7 @@ public final data class Evento(
     var ingressosVendidos: Int = 0
 )
 
-public final enum class TipoEvento{//ps como colocar CULTURAL/ENTRETERIMENTO?
+public final enum class TipoEvento{
 SOCIAL, CORPORATIVO, ACADÊMICO,
     CULTURAL, RELIGIOSOS, ESPORTIVOS,
     FEIRA, CONGRESSO, OFICINA, CURSO,
@@ -73,29 +73,29 @@ fun main() { // Escrever código aqui
 
     do {
         println(" - - - Dendê Eventos - - -")
-        println("Bem vindo a plataforma Dendê Eventos! Escolha a opção para prosseguir: ")
+        println("Bem-vindo à plataforma Dendê Eventos! Escolha a opção para prosseguir: ")
         println("1 -> Usuário - CADASTRAR:")
         println("2 -> Organizador - CADASTRAR:")
 
         val opcaoIni = readln().toIntOrNull()
 
         if (opcaoIni == null) {
-            println("Não é permitido nenhum formato além de número")
+            println("Insira somente a opção 1 ou 2.")
             continue
         }
 
         when (opcaoIni) {
             1 -> {
-                println("Você escolheu a opção de cadastrar usuário.")
+                println("Você escolheu a opção de cadastrar usuário comum.")
                 println("Escreva seu nome: ")
                 var username: String
                 do {
                     username = readln().lowercase().replaceFirstChar { it.uppercase() }
                     if (username.isBlank()) {
-                        println("É necessário digitar nome de usuário")
+                        println("É necessário digitar nome de usuário.")
                         continue
                     } else if (username.any() {it.isDigit()}) {
-                        println("Não pode conter números")
+                        println("O nome de usuário não pode conter números.")
                         continue
                     }
                 } while (username.isBlank() || username.any() {it.isDigit()})
@@ -115,15 +115,15 @@ fun main() { // Escrever código aqui
                 } while (birthday.isBlank() || !dataValida.matches(birthday))
 
 
-                println("Digite seu genero: [M]asculino [F]eminino")
+                println("Digite seu gênero: [M]asculino [F]eminino")
                 var entryGender: String
                 do {
                     entryGender = readln().uppercase()
                     if (entryGender.isBlank()) {
-                        println("É necessário digitar o genero")
+                        println("É necessário digitar o gênero.")
                         continue
                     } else if (entryGender.any() {it.isDigit()}) {
-                        println("Não pode conter números")
+                        println("Não pode conter números.")
                         continue
                     }
                     if (entryGender == "F") {
@@ -133,7 +133,7 @@ fun main() { // Escrever código aqui
                         gender = Gender.MASCULINO
                         continue
                     } else {
-                        println("Opção inválida!")
+                        println("Opção inválida. Tente novamente.")
                         continue
                     }
                 } while (entryGender.isBlank() || entryGender.any() {it.isDigit()} || entryGender != "M" && entryGender != "F")
@@ -143,10 +143,10 @@ fun main() { // Escrever código aqui
                 do {
                     email = readln().lowercase().replaceFirstChar { it.uppercase() }
                     if (email.isBlank()) {
-                        println("É necessário digitar Email")
+                        println("É necessário digitar o e-mail.")
                         continue
                     } else if (!emailValido.matches(email)) {
-                        println("Formato de email inválido")
+                        println("Formato de e-mail inválido.")
                         continue
                     }
                 } while (email.isBlank() || !emailValido.matches(email))
@@ -165,7 +165,7 @@ fun main() { // Escrever código aqui
                 val formatedBirthday = LocalDate.parse(birthday)
                 user = User(username, formatedBirthday, email, gender, password, isOrganizer = false)
 
-                println("===Usuário criado com sucesso===")
+                println("=== Usuário criado com sucesso ===")
                 println(user)
                 cadastro = false
             }
@@ -177,10 +177,10 @@ fun main() { // Escrever código aqui
                 do {
                     empresa = readln().uppercase()
                     if (empresa.isBlank()) {
-                        println("É necessário digitar S ou N")
+                        println("É necessário digitar S ou N.")
                         continue
                     } else if (empresa != "S" && empresa != "N") {
-                        println("Opção inválida!")
+                        println("Opção inválida. Tente novamente.")
                         continue
                     }
                 } while (empresa.isBlank() || empresa != "S" && empresa != "N")
@@ -193,7 +193,7 @@ fun main() { // Escrever código aqui
                         println("É necessário digitar nome de usuário")
                         continue
                     } else if (username.any() {it.isDigit()}) {
-                        println("Não pode conter números")
+                        println("O nome de usuário não pode conter números.")
                         continue
                     }
                 } while (username.isBlank() || username.any() {it.isDigit()})
@@ -204,21 +204,21 @@ fun main() { // Escrever código aqui
                 do {
                     birthday = readln()
                     if (birthday.isBlank()) {
-                        println("É necessário digitar data de nascimento")
+                        println("É necessário digitar data de nascimento.")
                         continue
                     } else if (!dataValida.matches(birthday)) {
-                        println("Formato de data inválida")
+                        println("Formato de data inválida. Tente novamente.")
                         continue
                     }
                 } while (birthday.isBlank() || !dataValida.matches(birthday))
 
 
-                println("Digite seu genero: [M]asculino [F]eminino")
+                println("Digite seu gênero: [M]asculino [F]eminino")
                 var entryGender: String
                 do {
                     entryGender = readln().uppercase()
                     if (entryGender.isBlank()) {
-                        println("É necessário digitar o genero")
+                        println("É necessário digitar o gênero.")
                         continue
                     } else if (entryGender.any() {it.isDigit()}) {
                         println("Não pode conter números")
@@ -231,20 +231,20 @@ fun main() { // Escrever código aqui
                         gender = Gender.MASCULINO
                         continue
                     } else {
-                        println("Opção inválida!")
+                        println("Opção inválida.")
                         continue
                     }
                 } while (entryGender.isBlank() || entryGender.any() {it.isDigit()} || entryGender != "M" && entryGender != "F")
 
-                println("Escreva seu Email: ")
+                println("Escreva seu e-mail: ")
                 var email: String
                 do {
                     email = readln().lowercase().replaceFirstChar { it.uppercase() }
                     if (email.isBlank()) {
-                        println("É necessário digitar Email")
+                        println("É necessário digitar o E-mail.")
                         continue
                     } else if (!emailValido.matches(email)) {
-                        println("Formato de email inválido")
+                        println("Formato de email inválido.")
                         continue
                     }
                 } while (email.isBlank() || !emailValido.matches(email))
@@ -255,24 +255,24 @@ fun main() { // Escrever código aqui
                 do {
                     password = readln()
                     if (password.isBlank()) {
-                        println("É necessário digitar senha!")
+                        println("É necessário digitar a senha.")
                         continue
                     }
                 } while (password.isBlank())
 
                 if(empresa == "S") {
-                    println("digite o CNPJ apenas os dígitos: ")
+                    println("digite o CNPJ, apenas números: ")
                     var cnpj: String
                     do {
                         cnpj = readln()
                         if (!cnpj.any {it.isDigit()}) {
-                            println("CNPJ Contem número")
+                            println("Digite somente números.")
                             continue
                         } else if (cnpj.isBlank()) {
-                            println("É necessário digitar CNPJ")
+                            println("É necessário digitar o CNPJ.")
                             continue
                         } else if (cnpj.length != 14) {
-                            println("Quantidade de caracteres errada")
+                            println("Insira pelo menos 14 caracteres.")
                             continue
                         }
                     } while (cnpj.isBlank() || !cnpj.any {it.isDigit()} || cnpj.length != 14)
@@ -323,18 +323,20 @@ fun main() { // Escrever código aqui
         println("1 -> Ver meu perfil ")
         println("2 -> Desativar conta ")
         println("3 -> Ativar conta")
-        println("4 -> Eventos - CADASTRAR:")
-        println("5 -> Eventos - ALTERAR:")
-        println("6 -> Eventos - STATUS:")
-        println("7 -> Meus Eventos")
-        println("8 -> Ver o Feed")
-        println("9 -> Comprar Ingresso")
-        println("10 -> Cancelar Ingresso")
-        println("11 -> Minha Carteira")
+        println("4 -> Ver o Feed")
+        println("5 -> Comprar Ingresso")
+        println("6 -> Cancelar Ingresso")
+        println("7 -> Minha Carteira")
+        if(user.isOrganizer) {
+            println("8 -> Eventos - CADASTRAR:")
+            println("9 -> Eventos - ALTERAR:")
+            println("10 -> Eventos - STATUS:")
+            println("11 -> Meus Eventos")
+        }
         println("0 -> Sair")
         val opcaoSis = readln().toIntOrNull()
         if (opcaoSis == null) {
-            println("Não é permitido nenhum formato além de número")
+            println("Não é permitido nenhum formato além de número.")
             continue
         }
         when(opcaoSis) {
@@ -354,25 +356,35 @@ fun main() { // Escrever código aqui
                 }
                 println("Status: ${if (user.isActive) "Ativo" else "Inativo"}")
                 println("\n1 - Alterar informações \n2 - Voltar")
-                if (readln().toIntOrNull() !in 0..2) {
+                val escolha = readln().toIntOrNull()
+
+                if (escolha == 1) {
+
                     if (user.isOrganizer) {
-                        println("O que deseja alterar? (1 - Nome de Usuário, 2 - Senha, 3 - CPNJ, 4 - Nome Fantasia")
+
+                        println("O que deseja alterar? (1 - Nome de Usuário, 2 - Senha, 3 - CNPJ, 4 - Nome Fantasia)")
                         when (readln()) {
+
                             "1" -> {
                                 print("Insira o novo nome: ")
                                 var username: String
                                 do {
-                                    username = readln().lowercase().replaceFirstChar { it.uppercase() }
-                                    if (username.isBlank()) {
-                                        println("É necessário digitar nome de usuário")
-                                        continue
-                                    } else if (username.any() {it.isDigit()}) {
-                                        println("Não pode conter números")
-                                        continue
+                                    username = readln().lowercase()
+                                        .replaceFirstChar { it.uppercase() }
+
+                                    when {
+                                        username.isBlank() ->
+                                            println("É necessário digitar nome de usuário")
+
+                                        username.any { it.isDigit() } ->
+                                            println("Não pode conter números")
                                     }
-                                } while (username.isBlank() || username.any() {it.isDigit()})
-                                user.username = username // ATRIBUIÇÃO
+
+                                } while (username.isBlank() || username.any { it.isDigit() })
+
+                                user.username = username
                             }
+
                             "2" -> {
                                 print("Insira a nova senha: ")
                                 var password: String
@@ -380,60 +392,76 @@ fun main() { // Escrever código aqui
                                     password = readln()
                                     if (password.isBlank()) {
                                         println("É necessário digitar senha!")
-                                        continue
                                     }
                                 } while (password.isBlank())
+
                                 user.password = password
                             }
+
                             "3" -> {
-                                print("Insira o novo CPNJ: ")
+                                print("Insira o novo CNPJ (apenas números): ")
                                 var cnpj: String
                                 do {
                                     cnpj = readln()
-                                    if (!cnpj.any {it.isDigit()}) {
-                                        println("CNPJ Contem número")
-                                        continue
-                                    } else if (cnpj.isBlank()) {
-                                        println("É necessário digitar CNPJ")
-                                        continue
-                                    } else if (cnpj.length != 14) {
-                                        println("Quantidade de caracteres errada")
-                                        continue
+
+                                    when {
+                                        cnpj.isBlank() ->
+                                            println("É necessário digitar CNPJ")
+
+                                        !cnpj.all { it.isDigit() } ->
+                                            println("CNPJ deve conter apenas números")
+
+                                        cnpj.length != 14 ->
+                                            println("CNPJ deve ter 14 dígitos")
                                     }
-                                } while (cnpj.isBlank() || !cnpj.any {it.isDigit()} || cnpj.length != 14)
+
+                                } while (cnpj.isBlank() || !cnpj.all { it.isDigit() } || cnpj.length != 14)
+
                                 user.cnpj = cnpj
                             }
+
                             "4" -> {
                                 print("Insira o novo Nome Fantasia: ")
                                 var nomeFantasia: String
                                 do {
-                                    nomeFantasia = readln().lowercase()
+                                    nomeFantasia = readln()
                                     if (nomeFantasia.isBlank()) {
-                                        println("É necessário digitar Razão Social")
-                                        continue
+                                        println("É necessário digitar Nome Fantasia")
                                     }
                                 } while (nomeFantasia.isBlank())
+
                                 user.nomeFantasia = nomeFantasia
                             }
+
+                            else -> println("Opção inválida!")
                         }
+
                     } else {
+
                         println("O que deseja alterar? (1 - Nome, 2 - Senha, 3 - Gênero, 4 - Data)")
+
                         when (readln()) {
+
                             "1" -> {
                                 print("Insira o novo nome: ")
                                 var username: String
                                 do {
-                                    username = readln().lowercase().replaceFirstChar { it.uppercase() }
-                                    if (username.isBlank()) {
-                                        println("É necessário digitar nome de usuário")
-                                        continue
-                                    } else if (username.any() {it.isDigit()}) {
-                                        println("Não pode conter números")
-                                        continue
+                                    username = readln().lowercase()
+                                        .replaceFirstChar { it.uppercase() }
+
+                                    when {
+                                        username.isBlank() ->
+                                            println("É necessário digitar nome")
+
+                                        username.any { it.isDigit() } ->
+                                            println("Não pode conter números")
                                     }
-                                } while (username.isBlank() || username.any() {it.isDigit()})
-                                user.username = username // ATRIBUIÇÃO
+
+                                } while (username.isBlank() || username.any { it.isDigit() })
+
+                                user.username = username
                             }
+
                             "2" -> {
                                 print("Insira a nova senha: ")
                                 var password: String
@@ -441,56 +469,56 @@ fun main() { // Escrever código aqui
                                     password = readln()
                                     if (password.isBlank()) {
                                         println("É necessário digitar senha!")
-                                        continue
                                     }
                                 } while (password.isBlank())
+
                                 user.password = password
                             }
+
                             "3" -> {
-                                print("Insira o novo gênero: [M]asculino [F]eminino ")
+                                print("Insira o novo gênero: [M]asculino [F]eminino: ")
                                 var entryGender: String
                                 do {
                                     entryGender = readln().uppercase()
-                                    if (entryGender.isBlank()) {
-                                        println("É necessário digitar o genero")
-                                        continue
-                                    } else if (entryGender.any() {it.isDigit()}) {
-                                        println("Não pode conter números")
-                                        continue
+
+                                    when (entryGender) {
+                                        "M" -> user.gender = Gender.MASCULINO
+                                        "F" -> user.gender = Gender.FEMININO
+                                        else -> println("Opção inválida! Digite M ou F.")
                                     }
-                                    if (entryGender == "F") {
-                                        gender = Gender.FEMININO
-                                        user.gender = gender
-                                        continue
-                                    } else if (entryGender == "M") {
-                                        gender = Gender.MASCULINO
-                                        user.gender = gender
-                                        continue
-                                    } else {
-                                        println("Opção inválida!")
-                                        continue
-                                    }
-                                } while (entryGender.isBlank() || entryGender.any() {it.isDigit()} || entryGender != "M" && entryGender != "F")
+
+                                } while (entryGender != "M" && entryGender != "F")
                             }
+
                             "4" -> {
                                 print("Insira a nova data (AAAA-MM-DD): ")
                                 var birthday: String
                                 do {
                                     birthday = readln()
-                                    if (birthday.isBlank()) {
-                                        println("É necessário digitar data de nascimento")
-                                        continue
-                                    } else if (!dataValida.matches(birthday)) {
-                                        println("Formato de data inválida")
-                                        continue
+
+                                    when {
+                                        birthday.isBlank() ->
+                                            println("É necessário digitar data")
+
+                                        !dataValida.matches(birthday) ->
+                                            println("Formato inválido (AAAA-MM-DD)")
                                     }
+
                                 } while (birthday.isBlank() || !dataValida.matches(birthday))
+
                                 user.birthday = LocalDate.parse(birthday)
                             }
+
+                            else -> println("Opção inválida!")
                         }
-                        println("Alteração realizada com sucesso!")
                     }
 
+                    println("Alteração realizada com sucesso!")
+
+                } else if (escolha == 2) {
+                    // voltar
+                } else {
+                    println("Opção inválida!")
                 }
             }
             2 -> {
@@ -498,6 +526,7 @@ fun main() { // Escrever código aqui
                 if (readln() == "1") {
                     user.isActive = false // Atualiza o status do usuário
                     println("Conta desativada. Para reativá-la, realize login na plataforma novamente.")
+                    break
                 }
             }
             3 -> {
@@ -519,7 +548,7 @@ fun main() { // Escrever código aqui
                     }
                 } while (confirmacao.isBlank() || confirmacao != "s" && confirmacao != "n")
             }
-            4 -> {
+            8 -> {
                 println("-> Cadastro de Evento, clique enter:")
                 //NOME ->
                 var nomeEventoUserInput = readln()
@@ -537,7 +566,7 @@ fun main() { // Escrever código aqui
                 var descricaoEventoUserInput = readln()
 
                 //DATAS ->
-                println(" - Data Inicio e horário, minimo de 30 mintuos: ")//CORRIGIR e achar um jeito de prevenir erro
+                println(" - Data Inicio e horário, minimo de 30 minutos: ")//CORRIGIR e achar um jeito de prevenir erro
 
                 var conversaoDataInicio: LocalDateTime? = null
                 do {
@@ -554,7 +583,7 @@ fun main() { // Escrever código aqui
                 var conversaoDataFim: LocalDateTime? = null
                 do {
                     try{
-                        println("DATA e HORÁRIO - YYYY/MM/DDT00:00:00 :")
+                        println("DATA e HORÁRIO DE FIM - YYYY/MM/DDT00:00:00 :")
                         var dataFimUserInput = readln().trim()
                         conversaoDataFim = LocalDateTime.parse(dataFimUserInput)
 
@@ -694,7 +723,7 @@ fun main() { // Escrever código aqui
                 listarEventos.add(novoEvento)
                 println("Evento ${novoEvento.nomeEvento} cadastrado com sucesso!")
             }
-            5 -> {
+            9 -> {
                 println("-> Alterar Evento:")
                 listarEventos.sortWith(compareBy<Evento> { it.dataInicio }.thenBy { it.nomeEvento })
                 if (listarEventos.isEmpty()) {
@@ -712,16 +741,17 @@ fun main() { // Escrever código aqui
                         "1" -> {
                             println("Digite o novo nome (Atual: ${evento.nomeEvento}):")
                             evento.nomeEvento = readln()
-                            println("Atualizado!")
+                            println("Nome atualizado com sucesso!!")
                         }
                         "2" -> {
                             println("Digite a nova descrição:")
                             evento.descricao = readln()
-                            println("Atualizado!")
+                            println("Descrição atualizada com sucesso!")
                         }
                         "3" -> {
                             //DATAS ->
-                            println(" - Data Inicio e horário, minimo de 30 mintuos: ")//CORRIGIR e achar um jeito de prevenir erro
+                            println(" - Data Inicio e horário, minimo de 30 minutos: ")//CORRIGIR e achar um jeito de
+                            // prevenir erro
 
                             var novaConversaoDataInicio: LocalDateTime? = null
                             do {
@@ -757,12 +787,12 @@ fun main() { // Escrever código aqui
 
                             evento.dataInicio = novaConversaoDataInicio
                             evento.dataFim = novaConversaoDataFim
-                            println("Atualizado!")
+                            println("Data atualizada com sucesso!")
                         }
                         "4" -> {
                             println("Digite o novo evento principal:")
                             evento.eventoPrincipal = readln()
-                            println("Atualizado!")
+                            println("Evento principal atualizado com sucesso!")
                         }
                         "5" -> {
                             var novaCapacidade: Int? = null
@@ -777,12 +807,12 @@ fun main() { // Escrever código aqui
 
                             } while(novaCapacidade == null)
                             evento.capacidadeMaxima = readln().toInt()
-                            println("Atualizado!")
+                            println("Capacidade atualizada com sucesso!")
                         }
                         "6" -> {
                             println("Digite o novo local: ")
                             evento.localEvento = readln()
-                            println("Atualizado!")
+                            println("Local atualizado com sucesso!")
                         }
                         "7" -> {
                             var novoPreco: Float? = null
@@ -797,7 +827,7 @@ fun main() { // Escrever código aqui
                                 }
                             } while (novoPreco == null)
                             evento.precoUnitario = novoPreco
-                            println("Atualizado!")
+                            println("Preço atualizado com sucesso!")
                         }
                         "8" -> {
                             var novaTaxa: Float? = null
@@ -812,7 +842,7 @@ fun main() { // Escrever código aqui
                                 }
                             } while (novaTaxa == null)
                             evento.taxaEstorno = novaTaxa
-                            println("Atualizado!")
+                            println("Taxa de estorno atualizada com sucesso!")
                         }
                         "9" -> {
                             println("Digite o novo tipo de evento:")
@@ -842,7 +872,7 @@ fun main() { // Escrever código aqui
                                 "22" -> evento.tipoEvento = TipoEvento.CORRIDA
                                 else -> println("Opção inválida. O tipo não foi alterado.")
                             }
-                            println("Atualizado!")
+                            println("Tipo de evento atualizado com sucesso!")
                         }
                         "10" -> {
                             println("Digite a nova modalidade:")
@@ -854,12 +884,12 @@ fun main() { // Escrever código aqui
                                 "3" -> evento.modalidade = Modalidade.REMOTO
                                 else -> println("Opção inválida.")
                             }
-                            println("Atualizado!")
+                            println("Modalidade atualizada com sucesso!")
                         }
                     }
                 }
             }
-            6 -> {
+            10 -> {
                 println("-> Status do Evento: ")
                 /*val eventosDoUsuario = listarEventos //para quando tiver user
                     .filter { it.organizador == "NomeDoUsuarioLogado" }
@@ -880,10 +910,10 @@ fun main() { // Escrever código aqui
                         "1" -> evento.isEventActive = true
                         "2" -> evento.isEventActive = false
                     }
-                    println("Atualizado!")
+                    println("Evento atualizado com sucesso!")
                 }
             }
-            7 -> {
+            11 -> {
                 println("\n--- EVENTOS CADASTRADOS ---")
                 var constamEventos = false
                 for (evento in listarEventos) {
@@ -894,7 +924,7 @@ fun main() { // Escrever código aqui
                 }
                 if (!constamEventos) println("nenhum evento cadastrado")
             }
-            8 -> {
+            4 -> {
                 println("\n--- feed de eventos ---")
                 val instanteCronologicoAtual = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
                 val cadeiaElegivel = listarEventos.filter {
@@ -910,7 +940,7 @@ fun main() { // Escrever código aqui
                     }
                 }
             }
-            9 -> {
+            5 -> {
                 print("\n qual o nome do evento? ")
                 val termoBuscado = readln().trim()
                 var eventoMapeado = false
@@ -938,7 +968,7 @@ fun main() { // Escrever código aqui
                 }
                 if (!eventoMapeado) println("evento não encontrado")
             }
-            10 -> {
+            6 -> {
                 print("\n número do ingresso a ser cancelado ")
                 val codigoFornecido = readln().trim().toIntOrNull()
 
@@ -967,7 +997,7 @@ fun main() { // Escrever código aqui
                     if (!registroAtivo) println("nenhum ingresso ativo com esse numero")
                 }
             }
-            11 -> {
+            7 -> {
                 println("\n---  INGRESSOS (CARTEIRA) ---")
                 var carteiraOcupada = false
                 val ordenacaoHistorica = listaIngressos.sortedWith(compareBy({ it.status != "ATIVO" }, { it.dataDoEvento }))
