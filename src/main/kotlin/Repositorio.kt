@@ -4,7 +4,7 @@ import model.*
 import kotlinx.datetime.*
 
 object Repositorio {
-    // Banco de Dados em Memória
+    // Banco de Dados em Memórias
     private val usuarios = mutableListOf<User>()
     private val eventos = mutableListOf<Evento>()
     private val ingressos = mutableListOf<Ingresso>()
