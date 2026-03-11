@@ -56,8 +56,4 @@ object Repositorio {
         return ingressos.filter { it.emailDono == email }
             .sortedWith(compareBy({ it.status != "ATIVO" }, { it.dataDoEvento }))
     }
-
-    // --- FUNÇÕES DE EXCLUSÃO/ALTERAÇÃO GENÉRICAS ---
-    // Em memória, a alteração é feita via referência de objeto,
-    // mas aqui você pode adicionar logs ou validações extras.
 }
