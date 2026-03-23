@@ -2,7 +2,7 @@ import kotlinx.datetime.*
 val listarEventos = mutableListOf<Evento>()
 
 //Cadastrar Evento
-fun cadastroEvento () {
+fun cadastroEvento (): Evento {
     println("-> Cadastro de Evento:")
 
     // NOME
@@ -152,8 +152,10 @@ fun cadastroEvento () {
         organizadorEmail = user.email
     )
 
-    listarEventos.add(novoEvento)
-    println("Evento ${novoEvento.nomeEvento} cadastrado com sucesso!")
+    return novoEvento.also{
+        listarEventos.add(it)
+        println("Evento ${it.nomeEvento} cadastrado com sucesso!")
+    }
 }
 
 //Alterar Evento
