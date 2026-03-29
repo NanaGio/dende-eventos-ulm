@@ -3,76 +3,58 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.periodUntil
 import kotlinx.datetime.toLocalDateTime
+// Import do Model.kt contendo as Data Classes
+import model.*
+import components.*
 
 val emailValido = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")
 val dataValida = Regex("""\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])""")
 
-lateinit var user: User
+//lateinit var user: User
 lateinit var gender: Gender
 
 //Cadastro de usuário comum
-fun cadastroUserComum (){
+fun cadastrarUsuarioComum (): User {
     println("Você escolheu a opção de cadastrar usuário comum.")
 
-    println("Escreva seu nome: ")
-    var username: String
-    do {
-        username = readln().lowercase().replaceFirstChar { it.uppercase() }
-        when {
-            username.isBlank() -> println("É necessário digitar nome de usuário.")
-            username.any { it.isDigit() } -> println("O nome de usuário não pode conter números.")
-        }
-    } while (username.isBlank() || username.any { it.isDigit() })
+    // Substituindo 11 linhas por apenas 1 (ou 2 para formatar)
+    val username = readString("Escreva seu nome: ", "Erro: O nome não pode ser vazio.", minLength = 1)
+        .trim()
+        .lowercase()
+        .replaceFirstChar { it.uppercase() }
 
-    println("Digite sua data de nascimento YYYY-MM-DD: ")
-    var birthday: String
-    do {
-        birthday = readln()
-        when {
-            birthday.isBlank() -> println("É necessário digitar data de nascimento.")
-            !dataValida.matches(birthday) -> println("Formato de data inválida.")
-        }
-    } while (birthday.isBlank() || !dataValida.matches(birthday))
+    var birthday = readLocalDate(
+        message = "Digite sua data de nascimento (YYYY-MM-DD): ",
+        errorMessage = "ERRO: Data inválida ou formato incorreto (Use: 2000-01-01)."
+    )
 
-    println("Digite seu gênero: [M]asculino [F]eminino")
-    var entryGender: String
-    do {
-        entryGender = readln().uppercase()
-        when {
-            entryGender.isBlank() -> println("É necessário digitar o gênero.")
-            entryGender.any { it.isDigit() } -> println("Não pode conter números.")
-            entryGender == "F" -> gender = Gender.FEMININO
-            entryGender == "M" -> gender = Gender.MASCULINO
-            else -> println("Opção inválida. Tente novamente.")
-        }
-    } while (entryGender.isBlank() || entryGender.any { it.isDigit() } || entryGender != "M" && entryGender != "F")
+    var entryGender = readGender(
+        message = "Digite seu gênero [M]asculino [F]eminino: ",
+        errorMessage = "Opção inválida! Digite apenas 'M' para Masculino ou 'F' para Feminino."
+    )
 
-    println("Escreva seu Email: ")
-    var email: String
-    do {
-        email = readln().lowercase().replaceFirstChar { it.uppercase() }
-        when {
-            email.isBlank() -> println("É necessário digitar o e-mail.")
-            !emailValido.matches(email) -> println("Formato de e-mail inválido.")
-        }
-    } while (email.isBlank() || !emailValido.matches(email))
+    var email = readEmail(
+        message = "Escreva seu Email: ",
+        errorMessage = "ERRO: Formato de e-mail inválido (ex: usuario@dende.com)."
+    )
 
-    println("Digite a senha: ")
-    var password: String
-    do {
-        password = readln()
-        if (password.isBlank()) println("É necessário digitar senha!")
-    } while (password.isBlank())
+    var password = readString(
+        message = "Digite a sua senha: ",
+        errorMessage = "A senha deve ser inserida. "
+    )
 
-    val formatedBirthday = LocalDate.parse(birthday)
-    user = User(username, formatedBirthday, email, gender, password, isOrganizer = false)
+    val novoUsuario = User(username, birthday, email, entryGender, password, isOrganizer = false)
 
     println("=== Usuário criado com sucesso ===")
-    println(user)
+    return novoUsuario
 }
 
 //Cadastro de usuário organizador
-fun cadastroUserOrganizador (){
+fun cadastrarUsuarioOrganizador (): User {
+    var cnpj = ""
+    var razaoSocial = ""
+    var nomeFantasia = ""
+
     println("Você escolheu a opção de cadastrar usuário organizador.")
 
     println("Você é uma empresa? [S]im [N]ão")
@@ -85,59 +67,33 @@ fun cadastroUserOrganizador (){
         }
     } while (empresa.isBlank() || empresa != "S" && empresa != "N")
 
-    println("Escreva seu nome: ")
-    var username: String
-    do {
-        username = readln().lowercase().replaceFirstChar { it.uppercase() }
-        when {
-            username.isBlank() -> println("É necessário digitar nome de usuário.")
-            username.any { it.isDigit() } -> println("O nome de usuário não pode conter números.")
-        }
-    } while (username.isBlank() || username.any { it.isDigit() })
+    val username = readString("Escreva seu nome: ", "Erro: O nome não pode ser vazio.", minLength = 1)
+        .trim()
+        .lowercase()
+        .replaceFirstChar { it.uppercase() }
 
-    println("Digite sua data de nascimento YYYY-MM-DD: ")
-    var birthday: String
-    do {
-        birthday = readln()
-        when {
-            birthday.isBlank() -> println("É necessário digitar data de nascimento.")
-            !dataValida.matches(birthday) -> println("Formato de data inválida. Tente novamente.")
-        }
-    } while (birthday.isBlank() || !dataValida.matches(birthday))
+    var birthday = readLocalDate(
+        message = "Digite sua data de nascimento (YYYY-MM-DD): ",
+        errorMessage = "ERRO: Data inválida ou formato incorreto (Use: 2000-01-01)."
+    )
 
-    println("Digite seu gênero: [M]asculino [F]eminino")
-    var entryGender: String
-    do {
-        entryGender = readln().uppercase()
-        when {
-            entryGender.isBlank() -> println("É necessário digitar o gênero.")
-            entryGender.any { it.isDigit() } -> println("Não pode conter números.")
-            entryGender == "F" -> gender = Gender.FEMININO
-            entryGender == "M" -> gender = Gender.MASCULINO
-            else -> println("Opção inválida.")
-        }
-    } while (entryGender.isBlank() || entryGender.any { it.isDigit() } || entryGender != "M" && entryGender != "F")
+    var entryGender = readGender(
+        message = "Digite seu gênero [M]asculino [F]eminino: ",
+        errorMessage = "Opção inválida! Digite apenas 'M' para Masculino ou 'F' para Feminino."
+    )
 
-    println("Escreva seu e-mail: ")
-    var email: String
-    do {
-        email = readln().lowercase().replaceFirstChar { it.uppercase() }
-        when {
-            email.isBlank() -> println("É necessário digitar o E-mail.")
-            !emailValido.matches(email) -> println("Formato de email inválido.")
-        }
-    } while (email.isBlank() || !emailValido.matches(email))
+    var email = readEmail(
+        message = "Escreva seu Email: ",
+        errorMessage = "ERRO: Formato de e-mail inválido (ex: usuario@dende.com)."
+    )
 
-    println("Digite a senha: ")
-    var password: String
-    do {
-        password = readln()
-        if (password.isBlank()) println("É necessário digitar a senha.")
-    } while (password.isBlank())
+    var password = readString(
+        message = "Digite a sua senha: ",
+        errorMessage = "A senha deve ser inserida. "
+    )
 
     if (empresa == "S") {
         println("Digite o CNPJ, apenas números: ")
-        var cnpj: String
         do {
             cnpj = readln()
             when {
@@ -147,168 +103,131 @@ fun cadastroUserOrganizador (){
             }
         } while (cnpj.isBlank() || !cnpj.all { it.isDigit() } || cnpj.length != 14)
 
-        println("Digite a Razão Social: ")
-        var razaoSocial: String
-        do {
-            razaoSocial = readln().lowercase()
-            if (razaoSocial.isBlank()) println("É necessário digitar Razão Social.")
-        } while (razaoSocial.isBlank())
+        var razaoSocial = readString("Digite a Razão Social: ", "É necessário digitar Razão Social.", minLength = 1)
 
-        println("Digite o Nome Fantasia: ")
-        var nomeFantasia: String
-        do {
-            nomeFantasia = readln().lowercase()
-            if (nomeFantasia.isBlank()) println("É necessário digitar Nome Fantasia.")
-        } while (nomeFantasia.isBlank())
+        var nomeFantasia = readString("Digite o Nome Fantasia: ", "É necessário digitar Nome Fantasia.", minLength = 1)
 
-        val formatedBirthday = LocalDate.parse(birthday)
-        user = User(username, formatedBirthday, email, gender, password, isOrganizer = true, cnpj, razaoSocial, nomeFantasia)
+        val novoOrganizador = User(username, birthday, email, entryGender, password, isOrganizer = true, cnpj,
+            razaoSocial, nomeFantasia)
+    }
+
+    val novoOrganizador = if (empresa == "S") {
+        User(
+            username,
+            birthday,
+            email,
+            entryGender,
+            password,
+            isOrganizer = true,
+            cnpj,
+            razaoSocial,
+            nomeFantasia
+        )
     } else {
-        val formatedBirthday = LocalDate.parse(birthday)
-        user = User(username, formatedBirthday, email, gender, password, isOrganizer = true)
+        User(
+            username,
+            birthday,
+            email,
+            entryGender,
+            password,
+            isOrganizer = true
+        )
     }
 
     println("=== Organizador criado com sucesso ===")
-    println(user)
+    return novoOrganizador
 }
 
 //Visualizar perfil
-fun visualizarPerfil (){
+fun visualizarPerfil(usuario: User) {
     val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
-    val idadeExata = user.birthday.periodUntil(today)
+
+    val idadeExata = usuario.birthday.periodUntil(today)
 
     println("""
         ======= MEU PERFIL =======
-        Nome: ${user.username}
-        E-mail: ${user.email}
-        Gênero: ${user.gender}
+        Nome: ${usuario.username}
+        E-mail: ${usuario.email}
+        Gênero: ${usuario.gender}
     """.trimIndent())
 
-    if (user.isOrganizer) {
-        println("CNPJ: ${user.cnpj}")
-        println("Nome Fantasia: ${user.nomeFantasia}")
+    if (usuario.isOrganizer) {
+        // Verifica se os campos não estão vazios antes de imprimir
+        if (usuario.cnpj.isNotEmpty()) println("CNPJ: ${usuario.cnpj}")
+        if (usuario.nomeFantasia.isNotEmpty()) println("Nome Fantasia: ${usuario.nomeFantasia}")
     } else {
         println("Idade detalhada: ${idadeExata.years} anos, ${idadeExata.months} meses e ${idadeExata.days} dias")
     }
 
-    println("Status: ${if (user.isActive) "Ativo" else "Inativo"}")
+    println("Status: ${if (usuario.isActive) "Ativo" else "Inativo"}")
 }
 
-//Alterar perfil
-fun alterarPerfil (){
-    if (user.isOrganizer) {
-        println("O que deseja alterar? (1 - Nome de Usuário, 2 - Senha, 3 - CNPJ, 4 - Nome Fantasia)")
-        when (readln()) {
-            "1" -> {
-                print("Insira o novo nome: ")
-                var username: String
-                do {
-                    username = readln().lowercase().replaceFirstChar { it.uppercase() }
-                    when {
-                        username.isBlank() -> println("É necessário digitar nome de usuário.")
-                        username.any { it.isDigit() } -> println("Não pode conter números.")
-                    }
-                } while (username.isBlank() || username.any { it.isDigit() })
-                user.username = username
-            }
-            "2" -> {
-                print("Insira a nova senha: ")
-                var password: String
-                do {
-                    password = readln()
-                    if (password.isBlank()) println("É necessário digitar senha!")
-                } while (password.isBlank())
-                user.password = password
-            }
-            "3" -> {
-                print("Insira o novo CNPJ (apenas números): ")
-                var cnpj: String
-                do {
-                    cnpj = readln()
-                    when {
-                        cnpj.isBlank() -> println("É necessário digitar CNPJ.")
-                        !cnpj.all { it.isDigit() } -> println("CNPJ deve conter apenas números.")
-                        cnpj.length != 14 -> println("CNPJ deve ter 14 dígitos.")
-                    }
-                } while (cnpj.isBlank() || !cnpj.all { it.isDigit() } || cnpj.length != 14)
-                user.cnpj = cnpj
-            }
-            "4" -> {
-                print("Insira o novo Nome Fantasia: ")
-                var nomeFantasia: String
-                do {
-                    nomeFantasia = readln()
-                    if (nomeFantasia.isBlank()) println("É necessário digitar Nome Fantasia.")
-                } while (nomeFantasia.isBlank())
-                user.nomeFantasia = nomeFantasia
-            }
-            else -> println("Opção inválida!")
+// Alterar perfil
+fun alterarPerfil(usuario: User) {
+    println("\n--- ALTERAR INFORMAÇÕES DO PERFIL ---")
+
+    if (usuario.isOrganizer) {
+        println("1 - Nome de Usuário\n2 - Senha\n3 - CNPJ\n4 - Nome Fantasia\n0 - Cancelar")
+
+        // Substituímos o readln() pelo readInt para garantir que a opção existe
+        when (readInt("Escolha o que alterar: ", "Opção inválida!", 0..4)) {
+            1 -> usuario.username = readString("Novo nome: ", "Não pode ser vazio.", 1)
+                .lowercase().replaceFirstChar { it.uppercase() }
+
+            2 -> usuario.password = readString("Nova senha: ", "A senha é obrigatória.")
+
+            3 -> usuario.cnpj = readCNPJ(
+                "Novo CNPJ (apenas 14 números): ",
+                "ERRO: O CNPJ deve ter exatamente 14 dígitos numéricos."
+            )
+
+            4 -> usuario.nomeFantasia = readString("Novo Nome Fantasia: ", "Não pode ser vazio.", 1)
+
+            0 -> return
         }
     } else {
-        println("O que deseja alterar? (1 - Nome, 2 - Senha, 3 - Gênero, 4 - Data)")
-        when (readln()) {
-            "1" -> {
-                print("Insira o novo nome: ")
-                var username: String
-                do {
-                    username = readln().lowercase().replaceFirstChar { it.uppercase() }
-                    when {
-                        username.isBlank() -> println("É necessário digitar nome.")
-                        username.any { it.isDigit() } -> println("Não pode conter números.")
-                    }
-                } while (username.isBlank() || username.any { it.isDigit() })
-                user.username = username
-            }
-            "2" -> {
-                print("Insira a nova senha: ")
-                var password: String
-                do {
-                    password = readln()
-                    if (password.isBlank()) println("É necessário digitar senha!")
-                } while (password.isBlank())
-                user.password = password
-            }
-            "3" -> {
-                print("Insira o novo gênero: [M]asculino [F]eminino: ")
-                var entryGender: String
-                do {
-                    entryGender = readln().uppercase()
-                    when (entryGender) {
-                        "M" -> user.gender = Gender.MASCULINO
-                        "F" -> user.gender = Gender.FEMININO
-                        else -> println("Opção inválida! Digite M ou F.")
-                    }
-                } while (entryGender != "M" && entryGender != "F")
-            }
-            "4" -> {
-                print("Insira a nova data (AAAA-MM-DD): ")
-                var birthday: String
-                do {
-                    birthday = readln()
-                    when {
-                        birthday.isBlank() -> println("É necessário digitar data.")
-                        !dataValida.matches(birthday) -> println("Formato inválido (AAAA-MM-DD).")
-                    }
-                } while (birthday.isBlank() || !dataValida.matches(birthday))
-                user.birthday = LocalDate.parse(birthday)
-            }
-            else -> println("Opção inválida!")
+        println("1 - Nome\n2 - Senha\n3 - Gênero\n4 - Data de Nascimento\n0 - Cancelar")
+
+        when (readInt("Escolha o que alterar: ", "Opção inválida!", 0..4)) {
+            1 -> usuario.username = readString("Novo nome: ", "Não pode ser vazio.", 1)
+                .lowercase().replaceFirstChar { it.uppercase() }
+
+            2 -> usuario.password = readString("Nova senha: ", "A senha é obrigatória.")
+
+            3 -> usuario.gender = readGender(
+                "Novo gênero [M/F]: ",
+                "Opção inválida! Use M ou F."
+            )
+
+            4 -> usuario.birthday = readLocalDate(
+                "Nova data (AAAA-MM-DD): ",
+                "Data inválida! Use o formato 2000-01-01."
+            )
+
+            0 -> return
         }
     }
-    println("Alteração realizada com sucesso!")
+    println("\n[SUCESSO] Alteração realizada com sucesso!")
 }
 
 //inativar conta
-fun inativarUsuario (){
-    println("Confirmar desativação? (1 - Sim, 2 - Não)")
-    if (readln() == "1") {
-        user.isActive = false
+fun inativarUsuario(usuario: User) {
+    val confirmar = readInt(
+        message = "Confirmar desativação? (1 - Sim, 2 - Não): ",
+        errorMessage = "Opção inválida! Digite 1 para confirmar ou 2 para cancelar.",
+        range = 1..2
+    )
+
+    if (confirmar == 1) {
+        usuario.isActive = false
         println("Conta desativada. Para reativá-la, realize login na plataforma novamente.")
+    } else {
+        println("Operação cancelada.")
     }
 }
 
 //ativar conta
-fun reativarUsuario (){
+fun reativarUsuario (usuario: User){
     println("Deseja confirmar a ativação do usuário: [S]im [N]ão")
     var confirmacao: String
     do {
@@ -316,7 +235,7 @@ fun reativarUsuario (){
         when {
             confirmacao.isBlank() -> println("É necessário digitar S ou N.")
             confirmacao == "s" -> {
-                user.isActive = true
+                usuario.isActive = true
                 println("Usuário ativado!")
             }
             confirmacao == "n" -> println("Pulando...")
@@ -324,5 +243,3 @@ fun reativarUsuario (){
         }
     } while (confirmacao.isBlank() || confirmacao != "s" && confirmacao != "n")
 }
-
-
